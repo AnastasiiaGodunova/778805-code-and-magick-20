@@ -9,6 +9,8 @@ var BAR_MAX_HEIGHT = 150;
 var BAR_WIDTH = 40;
 var GAP = 50;
 
+var colors = ['#0000FF', '#00BFFF', '#00008B', '#4169E1', '#191970'];
+
 var renderCloud = function (ctx, x, y, color) {
   ctx.fillStyle = color;
   ctx.fillRect(x, y, CLOUD_WIDTH, CLOUD_HEIGHT);
@@ -34,8 +36,8 @@ window.renderStatistics = function (ctx, names, times) {
   ctx.fillStyle = '#000000';
   ctx.font = '16px PT Mono';
   ctx.textBaseline = 'hanging';
-  ctx.fillText('Ура вы победили!', CLOUD_X + FONT_GAP, FONT_GAP);
-  ctx.fillText('Список результатов:', CLOUD_X + FONT_GAP, FONT_GAP * 2);
+  ctx.fillText('Ура вы победили!', CLOUD_X + GAP, FONT_GAP);
+  ctx.fillText('Список результатов:', CLOUD_X + GAP, FONT_GAP * 2);
 
   var maxTime = getMaxElement(times);
 
@@ -47,12 +49,10 @@ window.renderStatistics = function (ctx, names, times) {
     ctx.fillText(Math.round(times[i]), columnX, BAR_MAX_HEIGHT + GAP + FONT_GAP - barHeight);
     ctx.fillText(names[i], columnX, BAR_MAX_HEIGHT + CLOUD_X);
 
-    var colors = ['#0000FF', '#00BFFF', '#00008B', '#4169E1', '#191970'];
-
     if (names[i] === 'Вы') {
       ctx.fillStyle = 'rgba(255, 0, 0, 1)';
     } else {
-      ctx.fillStyle = colors[(Math.floor(Math.random() * 5))]; // Определение цвета
+      ctx.fillStyle = colors[(Math.floor(Math.random() * colors.length))]; // Определение цвета
     }
 
     ctx.fillRect(columnX, FONT_GAP + GAP + FONT_GAP + BAR_MAX_HEIGHT, BAR_WIDTH, -barHeight); // Построение гистограммы
