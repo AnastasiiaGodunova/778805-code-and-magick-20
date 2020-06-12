@@ -24,7 +24,11 @@ var wizardEyes = setupWizard.querySelector('.wizard-eyes');
 var wizardEyesColor = setup.querySelector('input[name=eyes-color]');
 var wizardFireball = setup.querySelector('.setup-fireball-wrap');
 var wizardFireballColor = setup.querySelector('input[name=fireball-color]');
-var count = 1;
+var counters = {
+  coat: 1,
+  eyes: 1,
+  fireball: 1
+};
 
 /* Удаляет класс*/
 var removeClass = function (elem, elemClass) {
@@ -101,29 +105,23 @@ setupClose.addEventListener('keydown', function (evt) {
   }
 });
 
-wizardCoat.addEventListener('click', function () {
-  wizardCoat.style.fill = coatColor[count];
-  wizardCoatColor.value = wizardCoat.style.fill;
-  count++;
-  if (count > coatColor.length - 1) {
-    count = 0;
+var getColor = function (obj, arr, input, cssTxt, count) {
+  obj.setAttribute('style', cssTxt + arr[counters[count]]);
+  input.value = obj.style.cssTxt;
+  counters[count]++;
+  if (counters[count] > arr.length - 1) {
+    counters[count] = 0;
   }
+};
+
+wizardCoat.addEventListener('click', function () {
+  getColor(wizardCoat, coatColor, wizardCoatColor, 'fill:', 'coat');
 });
 
 wizardEyes.addEventListener('click', function () {
-  wizardEyes.style.fill = eyesColor[count];
-  wizardEyesColor.value = wizardEyes.style.fill;
-  count++;
-  if (count > eyesColor.length - 1) {
-    count = 0;
-  }
+  getColor(wizardEyes, eyesColor, wizardEyesColor, 'fill:', 'eyes');
 });
 
 wizardFireball.addEventListener('click', function () {
-  wizardFireball.style.backgroundColor = fireballColor[count];
-  wizardFireballColor.value = wizardFireball.style.backgroundColor;
-  count++;
-  if (count > fireballColor.length - 1) {
-    count = 0;
-  }
+  getColor(wizardFireball, fireballColor, wizardFireballColor, 'background-color:', 'fireball');
 });
