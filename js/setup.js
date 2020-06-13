@@ -106,7 +106,7 @@ setupClose.addEventListener('keydown', function (evt) {
 });
 
 var getColor = function (obj, arr, input, cssTxt, count) {
-  obj.setAttribute('style', cssTxt + arr[counters[count]]);
+  obj.style[cssTxt] = arr[counters[count]];
   input.value = obj.style.cssTxt;
   counters[count]++;
   if (counters[count] > arr.length - 1) {
@@ -115,13 +115,13 @@ var getColor = function (obj, arr, input, cssTxt, count) {
 };
 
 wizardCoat.addEventListener('click', function () {
-  getColor(wizardCoat, coatColor, wizardCoatColor, 'fill:', 'coat');
+  getColor(wizardCoat, coatColor, wizardCoatColor, 'fill', 'coat');
 });
 
 wizardEyes.addEventListener('click', function () {
-  getColor(wizardEyes, eyesColor, wizardEyesColor, 'fill:', 'eyes');
+  getColor(wizardEyes, eyesColor, wizardEyesColor, 'fill', 'eyes');
 });
 
 wizardFireball.addEventListener('click', function () {
-  getColor(wizardFireball, fireballColor, wizardFireballColor, 'background-color:', 'fireball');
+  getColor(wizardFireball, fireballColor, wizardFireballColor, 'background-color', 'fireball');
 });
