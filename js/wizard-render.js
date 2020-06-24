@@ -6,15 +6,7 @@
   var similarWizardTemplate = document.querySelector('#similar-wizard-template')
   .content
   .querySelector('.setup-similar-item');
-  var wizardNames = {
-    names: ['Иван ', 'Хуан Себастьян ', 'Мария ', 'Кристоф ', 'Виктор ', 'Юлия ', 'Люпита ', 'Вашингтон '],
-    surnames: ['да Марья', 'Верон', 'Мирабелла', 'Вальц', 'Онопко', 'Топольницкая', 'Нионго', 'Ирвинг']
-  };
-  window.wizardRender = {
-    coatColor: ['rgb(101, 137, 164)', 'rgb(241, 43, 107)', 'rgb(146, 100, 161)', 'rgb(56, 159, 117)', 'rgb(215, 210, 55)',
-      'rgb(0, 0, 0)'],
-    eyesColor: ['black', 'red', 'blue', 'yellow', 'green']
-  };
+  var form = window.setup.querySelector('.setup-wizard-form');
 
   window.removeClass(setupSimilar, 'hidden');
 
@@ -26,24 +18,45 @@
   };
 
   /* Возвращает мага со случайными значениями*/
-  var fillWizard = function () {
+  var fillWizard = function (wizard) {
     var wizardElement = similarWizardTemplate.cloneNode(true);
 
-    wizardElement.querySelector('.setup-similar-label').textContent = getRandomArrElement(wizardNames.names) +
-    getRandomArrElement(wizardNames.surnames);
-    wizardElement.querySelector('.wizard-coat').style.fill = getRandomArrElement(window.wizardRender.coatColor);
-    wizardElement.querySelector('.wizard-eyes').style.fill = getRandomArrElement(window.wizardRender.eyesColor);
+    wizardElement.querySelector('.setup-similar-label').textContent = wizard.name;
+    wizardElement.querySelector('.wizard-coat').style.fill = wizard.colorCoat;
+    wizardElement.querySelector('.wizard-eyes').style.fill = wizard.colorEyes;
 
     return wizardElement;
   };
 
   /* Отрисовывает магов*/
-  var renderWizard = function () {
+  var successHandler = function (wizards) {
     var fragment = document.createDocumentFragment();
     for (var i = 0; i < 4; i++) {
-      fragment.appendChild(fillWizard());
+      fragment.appendChild(fillWizard(getRandomArrElement(wizards)));
     }
     similarListElement.appendChild(fragment);
+    setupSimilar.classList.remove('hidden');
   };
-  renderWizard();
+
+  var errorHandler = function (errorMessage) {
+    var node = document.createElement('div');
+    node.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: red;';
+    node.style.position = 'absolute';
+    node.style.left = 0;
+    node.style.right = 0;
+    node.style.fontSize = '30px';
+
+    node.textContent = errorMessage;
+    document.body.insertAdjacentElement('afterbegin', node);
+  };
+
+  window.backend.load(successHandler, errorHandler);
+
+  var submitHandler = function (evt) {
+    window.backend.save(new FormData(form), function () {
+      window.setup.classList.add('hidden');
+    });
+    evt.preventDefault();
+  };
+  form.addEventListener('submit', submitHandler, errorHandler);
 })();
